@@ -3,9 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "newGun", menuName = "Gun", order = 0)]
+// [CreateAssetMenu(fileName = "newGun", menuName = "Gun", order = 0)]
 public class Gun : ScriptableObject
 {
+    [SerializeField] private float _sight = 1;
+    [SerializeField] private Mesh _gunMesh = null;
+    
+    
     public Mesh GunMesh = null;
     public GunTypeEnum GunType = GunTypeEnum.Auto;
     public ShotTypeEnum ShotType = ShotTypeEnum.Normal;
@@ -19,21 +23,22 @@ public class Gun : ScriptableObject
     public int PelletCount = 1;
     public float MaxAngle = 15;
     public int BurstFire = 3;
+    public float Sight { get => _sight; }
 
     private void Awake()
     {
         CurrentMagasine = MagasineSize;
     }
 }
-public enum  GunTypeEnum
-{
-    Auto = 0,
-    Burst = 1,
-    SemiAuto = 2
-}
-
-public enum ShotTypeEnum
-{
-    Normal = 0,
-    ShotShell = 1
-}
+// public enum  GunTypeEnum
+// {
+//     Auto = 0,
+//     Burst = 1,
+//     SemiAuto = 2
+// }
+//
+// public enum ShotTypeEnum
+// {
+//     Normal = 0,
+//     ShotShell = 1
+// }

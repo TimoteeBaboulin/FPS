@@ -57,20 +57,21 @@ public class ScoreboardUI : MonoBehaviour
     }
 
     public void UpdatePlayerDamage(int damage, Player player) {
-        PlayerStats playerStat = FindPlayerStats(player);
-
-        playerStat.DamageDealt += damage;
-        
-        UpdateScoreboard();
+        // PlayerStats playerStat = FindPlayerStats(player);
+        //
+        // playerStat.DamageDealt += damage;
+        //
+        // UpdateScoreboard();
     }
 
-    private PlayerStats FindPlayerStats(Player player) {
-        foreach (var playerScore in PlayerScores)
-        {
-            if (playerScore.Player == player)
-                return playerScore;
-        }
-
-        throw new Exception("Couldn't find player");
-    }
+     // private PlayerStats FindPlayerStats(Player player)
+     // {
+     //     foreach (var playerScore in PlayerScores)
+     //     {
+     //         if (playerScore.Player == player)
+     //             return playerScore;
+     //     }
+     //
+     //     throw new Exception("Couldn't find player");
+     // }
 }

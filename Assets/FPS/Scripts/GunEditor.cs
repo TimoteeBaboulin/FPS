@@ -23,6 +23,7 @@ public class GunEditor : Editor
     private SerializedProperty _ReloadTime;
     private SerializedProperty _PelletCount;
     private SerializedProperty _MaxAngle;
+    private SerializedProperty _Sight;
 
     private bool _ShowBurstFire = false;
     private bool _ShowShotgun = false;
@@ -43,6 +44,7 @@ public class GunEditor : Editor
 
         _Projectile = serializedObject.FindProperty("Projectile");
         _VisualProjectile = serializedObject.FindProperty("VisualProjectile");
+        _Sight = serializedObject.FindProperty("_sight");
     }
 
     // Update is called once per frame
@@ -89,6 +91,7 @@ public class GunEditor : Editor
         EditorGUILayout.PropertyField(_MagasineSize);
         EditorGUILayout.PropertyField(_CurrentMagasine);
         EditorGUILayout.PropertyField(_ReloadTime);
+        EditorGUILayout.PropertyField(_Sight);
         
 
         serializedObject.ApplyModifiedProperties();

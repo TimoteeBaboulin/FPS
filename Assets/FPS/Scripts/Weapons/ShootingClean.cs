@@ -18,11 +18,12 @@ public class ShootingClean : MonoBehaviour
     public GameObject Gun;
 
     private bool _LookingDownSight;
+
     private bool _BurstFireRunning = false;
     /*private GunState _State;*/
-    
+
     private bool _CanShoot = true;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -53,7 +54,7 @@ public class ShootingClean : MonoBehaviour
             StartCoroutine(LookingDownSightCoroutine());
             return;
         }
-        
+
         if (Input.GetButton("Fire1"))
         {
             if (_GunScript.CurrentMagasine <= 0 && _GunScript.MagasineSize > 0)
@@ -71,20 +72,20 @@ public class ShootingClean : MonoBehaviour
     {
         _GunScript.CurrentMagasine--;
         UpdateUI();
-        
+
         switch (_GunScript.GunType)
         {
             case GunTypeEnum.Auto:
                 SpawnBullet();
                 StartCoroutine(TimerCoroutine());
                 break;
-            
+
             case GunTypeEnum.SemiAuto:
                 if (!Input.GetButtonDown("Fire1")) return false;
                 SpawnBullet();
                 StartCoroutine(TimerCoroutine());
                 break;
-                
+
             case GunTypeEnum.Burst:
                 StartCoroutine(BurstFire(3, 0.1f));
                 break;
@@ -93,40 +94,47 @@ public class ShootingClean : MonoBehaviour
         return true;
     }
 
-    private void SpawnBullet() {
+    private void SpawnBullet()
+    {
         switch (_GunScript.ShotType)
         {
             case ShotTypeEnum.Normal:
                 SpawnProjectile();
                 break;
-            
+
             case ShotTypeEnum.ShotShell:
                 SpawnPellets(10, 8);
                 break;
         }
-        
+
         Gun.GetComponent<Animator>().CrossFade("Fire Layer.Gun Animation", 0, 1);
     }
 
-    private void SpawnPellets(int number, int maxAngle) {
-        for (int x = 0; x < number; x++) {
+    private void SpawnPellets(int number, int maxAngle)
+    {
+        for (int x = 0; x < number; x++)
+        {
             //Use a 2D circle to generate a set of 2 random values
             //that are directly linked to each other in a circle
             float distance = Random.Range(0f, 1f);
-            int angle = Random.Range((int)0, 360);
+            int angle = Random.Range((int) 0, 360);
 
             Vector2 randomPoint = new Vector2(distance * math.cos(angle),
                 distance * math.sin(angle));
             randomPoint *= maxAngle;
-            
+
             SpawnProjectile(randomPoint.x, randomPoint.y);
         }
     }
 
+    /// <summary>
+    /// Handle all the code to spawn projectiles alongisde their visual representation
+    /// </summary>
     private void SpawnProjectile(float x = 0, float y = 0)
     {
         //Spawn the physical projectile and the visual projectile
-        GameObject shot = Instantiate(_GunScript.Projectile, transform.position + transform.forward * _GunScript.BulletDistance, transform.rotation);
+        GameObject shot = Instantiate(_GunScript.Projectile,
+            transform.position + transform.forward * _GunScript.BulletDistance, transform.rotation);
         GameObject visualProjectile = Instantiate(_GunScript.VisualProjectile, _GunBarrel.position, transform.rotation);
 
         if (x != 0 || y != 0)
@@ -136,41 +144,45 @@ public class ShootingClean : MonoBehaviour
             euler.y += y;
             shot.transform.rotation = Quaternion.Euler(euler);
         }
-        
+
         //Proceed to shoot a ray to find where the bullet should reach
         RaycastHit hit = new RaycastHit();
-        Physics.Raycast(shot.transform.position, shot.transform.forward, out hit, 100, LayerMask.GetMask("Hitbox", "Terrain"));
+        Physics.Raycast(shot.transform.position, shot.transform.forward, out hit, 100,
+            LayerMask.GetMask("Hitbox", "Terrain"));
         //If we didn't find a target, just shoot towards the middle
         //If we did find, shoot toward the point of the hitbox that was hit
         if (hit.collider == null)
             visualProjectile.transform.LookAt(transform.position + transform.forward * 100);
         else
             visualProjectile.transform.LookAt(hit.point);
-                
+
         //Set the shot's owner to be the player
         shot.GetComponent<INewBullet>().Owner = GetComponentInParent<Player>();
+
+        //Sync the bullet so the visual bullet dies if the physical does
         shot.AddComponent<DestroySync>();
         shot.GetComponent<DestroySync>().SyncedObject = visualProjectile;
     }
 
     private void UpdateUI()
     {
-        if (_GunScript.MagasineSize <= 0) {
+        if (_GunScript.MagasineSize <= 0)
+        {
             _UIAmmo.text = "Infinite";
             return;
         }
 
         _UIAmmo.text = _GunScript.CurrentMagasine + "/" + _GunScript.MagasineSize;
     }
-    
+
     //public access methods
     public bool ChangeGun(Gun newGun)
     {
         _GunScript = newGun;
         return true;
     }
-    
-    
+
+
     //Coroutines
     IEnumerator BurstFire(int shotAmount, float delay)
     {
@@ -213,7 +225,7 @@ public class ShootingClean : MonoBehaviour
             }
         }*/
     }
-    
+
     IEnumerator TimerCoroutine()
     {
         _CanShoot = false;
@@ -269,26 +281,45 @@ public class ShootingClean : MonoBehaviour
                 normalizedTime = 0;
                 continue;
             }
-            
+
             Camera.main.fieldOfView = 60 - (60 - fieldOfViewGoal) * animatorTime;
             normalizedTime = animatorTime;
         } while (animator.GetAnimatorTransitionInfo(0).normalizedTime < 1.0f);
 
         _CanShoot = true;
     }
-    
-    /*IEnumerator StopLookingDownSightCoroutine()
+
+    IEnumerator StopLookingDownSightCoroutine()
     {
         _CanShoot = false;
-        _LookingDownSight = true;
+        _LookingDownSight = false;
         Animator animator = Gun.GetComponent<Animator>();
         animator.SetBool("AimingDownSight", false);
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
+
+        const float FOVGoal = 60;
+        float normalizedTime = -1;
+        
+        do
         {
             yield return null;
-        }
+            float animatorTime = animator.GetAnimatorTransitionInfo(0).normalizedTime;
+            if (animatorTime == 0)
+            {
+                if (normalizedTime == 0)
+                {
+                    Camera.main.fieldOfView = FOVGoal;
+                    break;
+                }
+
+                normalizedTime = 0;
+                continue;
+            }
+
+            Camera.main.fieldOfView = 60 - (60 - FOVGoal) * animatorTime;
+            normalizedTime = animatorTime;
+        } while (animator.GetAnimatorTransitionInfo(0).normalizedTime < 1.0f);
 
         _CanShoot = true;
-    }*/
+    }
 }
 
