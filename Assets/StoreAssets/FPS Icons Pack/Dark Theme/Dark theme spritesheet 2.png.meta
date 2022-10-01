@@ -75,7 +75,7 @@ TextureImporter:
       213: 21300046
     second: DT Automatic rifle 4
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -96,6 +96,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -134,6 +135,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 1
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -157,6 +159,30 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 1
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 1024
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 1024
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -676,6 +702,31 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      DT Combat knife: 21300038
+      DT Automatic rifle 4: 21300046
+      DT Handgun 3: 21300014
+      DT Submachinegun 1: 21300024
+      DT Sniper 3: 21300020
+      DT Automatic rifle 1: 21300002
+      DT Rocketlauncher 1: 21300032
+      DT Automatic rifle 3: 21300044
+      DT Sniper 1: 21300036
+      DT Automatic rifle 2: 21300018
+      DT Automatic rifle 5: 21300006
+      DT Shotgun 2: 21300012
+      DT Sniper 2: 21300034
+      DT Submachinegun 2: 21300042
+      DT Handgun 4: 21300010
+      DT Handgun 2: 21300022
+      DT Automatic shotgun 1: 21300040
+      DT Semiautomatic rifle 1: 21300008
+      DT Handgun 1: 21300028
+      DT Submachinegun 3: 21300016
+      DT Rifle 1: 21300030
+      DT Shotgun 1: 21300026
+      DT Automatic rifle 6: 21300000
+      DT Handgun 5: 21300004
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
