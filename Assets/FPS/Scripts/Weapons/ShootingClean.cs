@@ -149,6 +149,8 @@ public class ShootingClean : MonoBehaviour
                 
         //Set the shot's owner to be the player
         shot.GetComponent<INewBullet>().Owner = GetComponentInParent<Player>();
+        shot.AddComponent<DestroySync>();
+        shot.GetComponent<DestroySync>().SyncedObject = visualProjectile;
     }
 
     private void UpdateUI()

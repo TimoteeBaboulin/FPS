@@ -16,7 +16,7 @@ public class PickupScript : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
-        Shoot shootingScript = other.GetComponentInChildren<Shoot>();
+        ShootingClean shootingScript = other.GetComponentInChildren<ShootingClean>();
         
         if (shootingScript == null) throw new Exception("Shoot Scrip not found");
 
