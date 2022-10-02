@@ -66,7 +66,7 @@ public class NewPlayer : MonoBehaviour
     {
         if (Input.GetButton("Fire1"))
         {
-            _gun.Shoot(_camera.GetComponent<Camera>());
+            _gun.Shoot();
         }
     }
 }

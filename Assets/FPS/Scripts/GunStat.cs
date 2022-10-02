@@ -16,6 +16,7 @@ public class GunStat : ScriptableObject
     [SerializeField] private GameObject _visualProjectile = null;
     [SerializeField] private float _shotDelay = 0.5f;
     [SerializeField] private float _range = 0;
+    [SerializeField] private float _spawnRange = 0;
     [SerializeField] private int _magasineSize = 10;
     [SerializeField] private float _reloadTime = 2f;
     [SerializeField] private int _pelletCount = 3;
@@ -50,6 +51,10 @@ public class GunStat : ScriptableObject
     public float Range
     {
         get => _range;
+    }
+    public float SpawnRange
+    {
+        get => _spawnRange;
     }
     public int MagasineSize
     {

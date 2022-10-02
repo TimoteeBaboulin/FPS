@@ -18,6 +18,7 @@ public class GunStatEditor : Editor
     private SerializedProperty _shotType;
     private SerializedProperty _shotDelay;
     private SerializedProperty _range;
+    private SerializedProperty _spawnRange;
     private SerializedProperty _magasineSize;
     private SerializedProperty _reloadTime;
     private SerializedProperty _pelletCount;
@@ -35,6 +36,7 @@ public class GunStatEditor : Editor
         _shotType = serializedObject.FindProperty("_shotType");
         _shotDelay = serializedObject.FindProperty("_shotDelay");
         _range = serializedObject.FindProperty("_range");
+        _spawnRange = serializedObject.FindProperty("_spawnRange");
         _magasineSize = serializedObject.FindProperty("_magasineSize");
         _reloadTime = serializedObject.FindProperty("_reloadTime");
         _pelletCount = serializedObject.FindProperty("_pelletCount");
@@ -86,6 +88,7 @@ public class GunStatEditor : Editor
         EditorGUILayout.PropertyField(_visualProjectile);
         EditorGUILayout.PropertyField(_shotDelay);
         EditorGUILayout.PropertyField(_range);
+        EditorGUILayout.PropertyField(_spawnRange);
         EditorGUILayout.PropertyField(_magasineSize);
         EditorGUILayout.PropertyField(_reloadTime);
         EditorGUILayout.PropertyField(_sight);
