@@ -9,6 +9,7 @@ public class NewPlayer : MonoBehaviour
 {
     [Range(0.1f, 100)]
     public float Speed = 1;
+    public AnimationAnchors AnimationAnchors = new AnimationAnchors();
 
     [SerializeField] private float _cameraSpeed = 1;
     public float CameraSpeed
@@ -36,7 +37,23 @@ public class NewPlayer : MonoBehaviour
     {
         Move();
         RotateCamera();
-        Shoot();
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Shoot();
+            return;
+        }
+        if (Input.GetMouseButton(0) && _gun.CurrentGun.GunType != GunTypeEnum.SemiAuto)
+        {
+            Shoot();
+            return;
+        }
+
+        if (Input.GetButtonDown("Reloading"))
+        {
+            _gun.Reload(this);
+            return;
+        }
     }
 
     private void Move()
@@ -64,9 +81,6 @@ public class NewPlayer : MonoBehaviour
 
     private void Shoot()
     {
-        if (Input.GetButton("Fire1"))
-        {
-            _gun.Shoot();
-        }
+        _gun.Shoot(this);
     }
 }

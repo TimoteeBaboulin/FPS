@@ -14,7 +14,8 @@ public class NewGun
     [SerializeField] private GunStat _currentGun = null;
     [SerializeField] private int _currentMagasine = 30;
     private bool _canShoot = true;
-    private float _lastShot = 0f;
+    //the time at which the last shot was shot
+    private float _nextShot = 0f;
 
     public Camera Camera;
     public GameObject Barrel;
@@ -59,7 +60,7 @@ public class NewGun
     {
         get
         {
-            if (_canShoot && !IsOutOfAmmo && Time.time > _lastShot + _currentGun.ShotDelay) return true;
+            if (_canShoot && !IsOutOfAmmo && Time.time > _nextShot + _currentGun.ShotDelay) return true;
             return false;
         }
     }
@@ -69,13 +70,32 @@ public class NewGun
     /// <summary>
     /// All the public access functions
     /// </summary>
-    public void Shoot()
+    public void Shoot(NewPlayer player)
     {
-        Debug.Log(CanShoot);
         if (_currentGun == null) return;
-        if (!CanShoot) return; 
-        SpawnProjectile();
-        _lastShot = Time.time;
+        if (CanShoot)
+        {
+            if (_currentMagasine > -1)
+                _currentMagasine--;
+            SpawnProjectile();
+            PlayAnimation(player);
+            _nextShot = Time.time + _currentGun.ShotDelay;
+            return;
+        }
+
+        if (_currentMagasine == 0)
+        {
+            Reloading(player);
+        }
+
+    }
+
+    public void Reload(NewPlayer player)
+    {
+        if (_currentMagasine == -1 || _currentMagasine == _currentGun.MagasineSize)
+        {
+            Reloading(player);
+        }
     }
     
     
@@ -113,8 +133,25 @@ public class NewGun
         shot.AddComponent<DestroySync>();
         shot.GetComponent<DestroySync>().SyncedObject = visualProjectile;
     }
-    
-    
+
+    private void PlayAnimation(NewPlayer player)
+    {
+        if (player.AnimationAnchors.GunAnchor == null) return;
+        player.AnimationAnchors.GunAnchor.CrossFade("Gun Animation", 0, 1);
+        player.AnimationAnchors.GunAnchor.speed = 1 / _currentGun.ShotDelay;
+    }
+
+    private void Reloading(NewPlayer player)
+    {
+        _currentMagasine = _currentGun.MagasineSize;
+        _nextShot = Time.time + _currentGun.ReloadTime;
+        player.AnimationAnchors.ReloadAnimator.CrossFade("Reloading", 0);
+        player.AnimationAnchors.ReloadAnimator.speed = 1 / _currentGun.ReloadTime;
+        
+        Debug.Log("Reload");
+    }
+
+
     /// <summary>
     /// All the coroutines needed for the code
     /// </summary>
