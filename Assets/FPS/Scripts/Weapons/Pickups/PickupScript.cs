@@ -10,7 +10,7 @@ namespace FPS.Scripts.Weapons.Pickups
         private void Awake()
         {
             if (PickupGun.GetComponent<Gun>() == null) return;
-            GetComponentInChildren<MeshFilter>().mesh = PickupGun.GetComponentInChildren<MeshFilter>().mesh;
+            GetComponentInChildren<MeshFilter>().mesh = PickupGun.GetComponentInChildren<MeshFilter>().sharedMesh;
         }
 
         private void OnTriggerEnter(Collider other)
