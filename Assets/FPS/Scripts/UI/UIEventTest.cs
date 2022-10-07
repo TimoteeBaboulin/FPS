@@ -1,43 +1,46 @@
 using System.Collections;
-using System.Collections.Generic;
+using FPS.Scripts.Entities;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIEventTest : MonoBehaviour
+namespace FPS.Scripts.UI
 {
-    public Entity[] TargetEvents;
-    private Coroutine _CurrentCoroutine;
-    // Start is called before the first frame update
-    void Start()
+    public class UIEventTest : MonoBehaviour
     {
-        TargetEvents = GameObject.FindObjectsOfType<Entity>();
-        foreach (var entity in TargetEvents)
+        public Entity[] TargetEvents;
+        private Coroutine _CurrentCoroutine;
+        // Start is called before the first frame update
+        void Start()
         {
-            entity.SubToDamageEvent(DamagedUpdate);
+            TargetEvents = GameObject.FindObjectsOfType<Entity>();
+            foreach (var entity in TargetEvents)
+            {
+                entity.SubToDamageEvent(DamagedUpdate);
+            }
         }
-    }
 
-    void DamagedUpdate(int damage, string hitboxName)
-    {
-        if (_CurrentCoroutine == null)
-            _CurrentCoroutine = StartCoroutine(DamagedUpdateCoroutine(damage, hitboxName));
-        else {
-            StopCoroutine(_CurrentCoroutine);
-            _CurrentCoroutine = StartCoroutine(DamagedUpdateCoroutine(damage, hitboxName));
+        void DamagedUpdate(int damage, string hitboxName)
+        {
+            if (_CurrentCoroutine == null)
+                _CurrentCoroutine = StartCoroutine(DamagedUpdateCoroutine(damage, hitboxName));
+            else {
+                StopCoroutine(_CurrentCoroutine);
+                _CurrentCoroutine = StartCoroutine(DamagedUpdateCoroutine(damage, hitboxName));
+            }
         }
-    }
 
-    IEnumerator DamagedUpdateCoroutine(int damage, string hitboxName)
-    {
-        float timer = 0;
+        IEnumerator DamagedUpdateCoroutine(int damage, string hitboxName)
+        {
+            float timer = 0;
         
-        GetComponent<Text>().text = "Hit " + hitboxName + " for " + damage.ToString() + " damage.";
+            GetComponent<Text>().text = "Hit " + hitboxName + " for " + damage.ToString() + " damage.";
 
-        while (timer < 2) {
-            timer += Time.deltaTime;
-            yield return null;
+            while (timer < 2) {
+                timer += Time.deltaTime;
+                yield return null;
+            }
+
+            GetComponent<Text>().text = "No Damage in 2s";
         }
-
-        GetComponent<Text>().text = "No Damage in 2s";
     }
 }

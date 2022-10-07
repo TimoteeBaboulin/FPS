@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public interface ISpawnManager
+namespace FPS.Scripts.Weapons.Bullets.Interface
 {
-    public Player Owner { get; set; }
+    public interface ISpawnManager
+    {
+        public Player Owner { get; set; }
+    }
 }

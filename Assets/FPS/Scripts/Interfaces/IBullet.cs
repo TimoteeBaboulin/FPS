@@ -1,10 +1,11 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using FPS.Scripts.Entities;
 
-public interface IBullet
+namespace FPS.Scripts.Interfaces
 {
-    public Player Owner { get; set; }
-    public Action<int, Player> OnDealingDamage { get; set; }
+    public interface IBullet
+    {
+        public Player Owner { get; set; }
+        public Action<int, Player> OnDealingDamage { get; set; }
+    }
 }

@@ -1,18 +1,19 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class FrameRateLock : MonoBehaviour
+namespace FPS.Scripts.System
 {
-    public static FrameRateLock Instance;
-    public int FPS = 60;
-    
-    void Start()
+    public class FrameRateLock : MonoBehaviour
     {
-        if (Instance != null) throw new Exception("Another FrameRateLock already exists");
+        public static FrameRateLock Instance;
+        public int FPS = 60;
+    
+        void Start()
+        {
+            if (Instance != null) throw new Exception("Another FrameRateLock already exists");
 
-        Instance = this;
-        Application.targetFrameRate = FPS;
+            Instance = this;
+            Application.targetFrameRate = FPS;
+        }
     }
 }

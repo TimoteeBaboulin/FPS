@@ -1,74 +1,146 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
-public class Player : MonoBehaviour, IEntity
+namespace FPS.Scripts
 {
+    public class Player : MonoBehaviour
+    {
+        [Range(0.1f, 100)]
+        public float Speed = 1;
 
-    public int _Health { get; set; } = 1000;
-    public GameObject HealthBar { get; set; } = null;
-    public Action<int, string> OnDeath { get; set; }
-    public Action<int, string> OnDamaged { get; set; }
+        [SerializeField] private float _cameraSpeed = 1;
+        public float CameraSpeed
+        {
+            get => _cameraSpeed;
+        }
+
+        [SerializeField] private GameObject _gun = null;
+        [SerializeField] private GameObject _camera = null;
+        [SerializeField] private TemporaryIK _IKScript = null;
+        private CharacterController _controller = null;
+
+        public GameObject Gun
+        {
+            get => _gun;
+            set
+            {
+                if (_camera == null) return;
+                _gun = Instantiate(value, _camera.transform);
+                SetIK();
+            }
+        }
     
-    public float Speed;
-    public float CameraSpeed;
+        void Start()
+        {
+            _controller = GetComponent<CharacterController>();
 
-    [SerializeField] private Camera _Camera;
-    [SerializeField] private GameObject _Gun;
-    private CharacterController _Controller;
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
 
-    private void Awake()
-    {
-        _Controller = GetComponent<CharacterController>();
+            if (_camera == null) return;
+            Camera.SetupCurrent(_camera.GetComponent<Camera>());
+            if (_gun != null) Gun = _gun;
+        }
 
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-    }
+        // Update is called once per frame
+        void Update()
+        {
+            Move();
+            RotateCamera();
+
+            if (_gun == null || _gun.GetComponent<Gun>() == null) return;
+            
+            if (Input.GetMouseButtonDown(0))
+            {
+                _gun.GetComponent<Gun>().Shoot();
+                return;
+            }
+            
+            if (Input.GetMouseButton(0) && _gun.GetComponent<Gun>().CurrentGun.GunType != GunTypeEnum.SemiAuto)
+            {
+                _gun.GetComponent<Gun>().Shoot();
+                return;
+            }
+
+            if (Input.GetButtonDown("Reloading"))
+            {
+                _gun.GetComponent<Gun>().Reload();
+                return;
+            }
+        }
+
+        private void Move()
+        {
+            Vector3 movement = new Vector3();
+            movement += transform.forward * Input.GetAxis("Vertical");
+            movement += transform.right * Input.GetAxis("Horizontal");
+            movement.Normalize();
+
+            _controller.Move(movement * Speed * Time.deltaTime);
+        }
     
-    private void Update()
-    {
-        Move();
-        RotateCamera();
+        private void RotateCamera()
+        {
+            Transform cameraTransform = Camera.main.transform;
+            transform.RotateAround(cameraTransform.position, Vector3.up, Input.GetAxis("Mouse X") * CameraSpeed);
+            cameraTransform.RotateAround(cameraTransform.position, cameraTransform.right, Input.GetAxis("Mouse Y") * CameraSpeed * -1);
+
+            Quaternion cameraRotation = cameraTransform.rotation;
+            cameraRotation.x = Mathf.Clamp(cameraRotation.x, -88, 88);
+            cameraTransform.rotation = cameraRotation;
+        }
+
+        [ContextMenu("SetIK")]
+        private void SetIK()
+        {
+            var links = _gun.GetComponent<GunIKLink>();
+            if (_IKScript == null) return;
+            if (links.RightHandIK != null)
+            {
+                _IKScript.RightHandObj = links.RightHandIK.transform;
+            } else
+            {
+                _IKScript.RightHandObj = null;
+            }
+                    
+            if (links.RightHandHint != null)
+            {
+                _IKScript.RightHandHint = links.RightHandHint.transform;
+            } else
+            {
+                _IKScript.RightHandHint = null;
+            }
+            
+            if (links.LeftHandIK != null)
+            {
+                _IKScript.LeftHandObj = links.LeftHandIK.transform;
+            } else
+            { 
+                _IKScript.LeftHandObj = null;
+            }
+            
+            if (links.LeftHandHint != null)
+            {
+                _IKScript.LeftHandHint = links.LeftHandHint.transform;
+            } else
+            {
+                _IKScript.LeftHandHint = null;
+            }
+        }
+
+        public void ChangeWeapon(GameObject gunPrefab)
+        {
+            if (_camera == null) return;
+            _gun = Instantiate(gunPrefab, _camera.transform);
+            SetIK();
+        }
     }
 
-    private void Move()
+    [Serializable]
+    public struct PlayerIKs
     {
-        Vector3 movement = new Vector3();
-        movement += transform.forward * Input.GetAxis("Vertical");
-        movement += transform.right * Input.GetAxis("Horizontal");
-        movement.Normalize();
-
-        transform.position += movement * Speed * Time.deltaTime;
-        /*_Controller.Move(movement * Speed * Time.deltaTime);*/
-    }
-
-    private void RotateCamera()
-    {
-        Transform cameraTransform = _Camera.transform;
-        transform.RotateAround(cameraTransform.position, Vector3.up, Input.GetAxis("Mouse X") * CameraSpeed);
-        cameraTransform.RotateAround(cameraTransform.position, cameraTransform.right, Input.GetAxis("Mouse Y") * CameraSpeed * -1);
-
-        Quaternion cameraRotation = cameraTransform.rotation;
-        cameraRotation.x = Mathf.Clamp(cameraRotation.x, -88, 88);
-        cameraTransform.rotation = cameraRotation;
-        
-        _Gun.transform.LookAt(cameraTransform.position + cameraTransform.forward * 10);
-    }
-
-    public void TakeDamage(int damage, string hitboxName)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void SubToDeathEvent(Action<int, string> function)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void SubToDamageEvent(Action<int, string> function)
-    {
-        throw new NotImplementedException();
+        public GameObject LeftIKs;
+        public GameObject RightIKs;
     }
 }

@@ -1,9 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public interface IDamageable
+namespace FPS.Scripts.Interfaces
 {
-    public int GetHit(int damage);
+    public interface IDamageable
+    {
+        public int GetHit(int damage);
+    }
 }

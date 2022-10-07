@@ -1,77 +1,79 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using FPS.Scripts.Entities;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ScoreboardUI : MonoBehaviour
+namespace FPS.Scripts.UI
 {
-    public Text ScoreboardText;
-    public class PlayerStats {
-        public Player Player;
-        public string Name;
-        public int DamageDealt;
-        public int DamageTaken;
-
-        public PlayerStats(Player player, string name) {
-            Player = player;
-            Name = name;
-            DamageDealt = 0;
-            DamageTaken = 0;
-        }
-    }
-    
-    private List<PlayerStats> PlayerScores = new List<PlayerStats>();
-
-    public static ScoreboardUI Instance;
-
-    private void Awake()
+    public class ScoreboardUI : MonoBehaviour
     {
-        if (Instance == null)
-            Instance = this;
-        
-        Player[] players = GameObject.FindObjectsOfType<Player>();
-        foreach (var player in players)
-        {
-            PlayerScores.Add(new PlayerStats(player, player.gameObject.name));
+        public Text ScoreboardText;
+        public class PlayerStats {
+            public Player Player;
+            public string Name;
+            public int DamageDealt;
+            public int DamageTaken;
+
+            public PlayerStats(Player player, string name) {
+                Player = player;
+                Name = name;
+                DamageDealt = 0;
+                DamageTaken = 0;
+            }
         }
-        
-        UpdateScoreboard();
-    }
+    
+        private List<PlayerStats> PlayerScores = new List<PlayerStats>();
 
+        public static ScoreboardUI Instance;
 
-    void UpdateScoreboard() {
-        if (ScoreboardText == null)
-            return;
-        
-        string newText = "Damage Dealt:\n";
-
-        foreach (var score in PlayerScores)
+        private void Awake()
         {
-            newText += score.Name + " : " + score.DamageDealt + "\n";
+            if (Instance == null)
+                Instance = this;
+        
+            Player[] players = GameObject.FindObjectsOfType<Player>();
+            foreach (var player in players)
+            {
+                PlayerScores.Add(new PlayerStats(player, player.gameObject.name));
+            }
+        
+            UpdateScoreboard();
         }
 
-        newText.Remove(newText.Length - 2, 2);
 
-        ScoreboardText.text = newText;
-    }
+        void UpdateScoreboard() {
+            if (ScoreboardText == null)
+                return;
+        
+            string newText = "Damage Dealt:\n";
 
-    public void UpdatePlayerDamage(int damage, Player player) {
-        // PlayerStats playerStat = FindPlayerStats(player);
+            foreach (var score in PlayerScores)
+            {
+                newText += score.Name + " : " + score.DamageDealt + "\n";
+            }
+
+            newText.Remove(newText.Length - 2, 2);
+
+            ScoreboardText.text = newText;
+        }
+
+        public void UpdatePlayerDamage(int damage, Player player) {
+            // PlayerStats playerStat = FindPlayerStats(player);
+            //
+            // playerStat.DamageDealt += damage;
+            //
+            // UpdateScoreboard();
+        }
+
+        // private PlayerStats FindPlayerStats(Player player)
+        // {
+        //     foreach (var playerScore in PlayerScores)
+        //     {
+        //         if (playerScore.Player == player)
+        //             return playerScore;
+        //     }
         //
-        // playerStat.DamageDealt += damage;
-        //
-        // UpdateScoreboard();
+        //     throw new Exception("Couldn't find player");
+        // }
     }
-
-     // private PlayerStats FindPlayerStats(Player player)
-     // {
-     //     foreach (var playerScore in PlayerScores)
-     //     {
-     //         if (playerScore.Player == player)
-     //             return playerScore;
-     //     }
-     //
-     //     throw new Exception("Couldn't find player");
-     // }
 }

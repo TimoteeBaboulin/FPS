@@ -1,44 +1,45 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using FPS.Scripts.Interfaces;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-[ExecuteInEditMode]
-public class Hurtbox : MonoBehaviour, IDamageable
+namespace FPS.Scripts.Entities
 {
-    private Entity _Master;
-    public GameObject BodyPart = null;
-    [SerializeField] private float _DamageModifier = 1;
-
-    private void Awake()
+    [ExecuteInEditMode]
+    public class Hurtbox : MonoBehaviour, IDamageable
     {
-        _Master = GetComponentInParent<Entity>();
-    }
+        private Entity _Master;
+        public GameObject BodyPart = null;
+        [SerializeField] private float _DamageModifier = 1;
 
-    private void Update()
-    {
-        if (BodyPart == null || !BodyPart.transform.hasChanged) return;
+        private void Awake()
+        {
+            _Master = GetComponentInParent<Entity>();
+        }
 
-        transform.position = BodyPart.transform.position;
-        transform.rotation = BodyPart.transform.rotation;
-    }
+        private void Update()
+        {
+            if (BodyPart == null || !BodyPart.transform.hasChanged) return;
 
-    public int GetHit(int damage)
-    {
-        if (_Master == null)
-            throw new NullReferenceException("Master was not set.");
+            transform.position = BodyPart.transform.position;
+            transform.rotation = BodyPart.transform.rotation;
+        }
+
+        public int GetHit(int damage)
+        {
+            if (_Master == null)
+                throw new NullReferenceException("Master was not set.");
         
-        _Master.TakeDamage((int) (damage * _DamageModifier), gameObject.name);
-        return (int) (damage * _DamageModifier);
-    }
+            _Master.TakeDamage((int) (damage * _DamageModifier), gameObject.name);
+            return (int) (damage * _DamageModifier);
+        }
 
-    private void OnDestroy()
-    {
-        if (GetComponent<TrailRenderer>() == null) return;
+        private void OnDestroy()
+        {
+            if (GetComponent<TrailRenderer>() == null) return;
 
-        TrailRenderer trailRenderer = GetComponent<TrailRenderer>();
-        GameObject newObject = Instantiate<GameObject>(new GameObject());
-        newObject.AddComponent<TrailRenderer>();
+            TrailRenderer trailRenderer = GetComponent<TrailRenderer>();
+            GameObject newObject = Instantiate<GameObject>(new GameObject());
+            newObject.AddComponent<TrailRenderer>();
+        }
     }
 }

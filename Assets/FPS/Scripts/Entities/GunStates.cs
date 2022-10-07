@@ -1,17 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using UnityEngine;
-
-public class GunIdleState : State
+namespace FPS.Scripts.Entities
 {
-    public GunIdleState() : base()
+    public class GunIdleState : State
     {
-        state = GunState.IDLE;
-    }
+        public GunIdleState() : base()
+        {
+            state = GunState.IDLE;
+        }
     
-    public void Enter()
-    {
-        base.Enter();
+        public void Enter()
+        {
+            base.Enter();
+        }
     }
 }

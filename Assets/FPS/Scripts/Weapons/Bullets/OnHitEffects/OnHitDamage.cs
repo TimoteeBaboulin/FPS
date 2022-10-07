@@ -1,20 +1,24 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using FPS.Scripts.Entities;
+using FPS.Scripts.Weapons.Bullets.Interface;
 using UnityEngine;
 
-public class OnHitDamage : MonoBehaviour
+namespace FPS.Scripts.Weapons.Bullets.OnHitEffects
 {
-    [SerializeField] private int _BaseDamage;
-    private void Start()
+    public class OnHitDamage : MonoBehaviour
     {
-        GetComponent<INewBullet>().OnHit += OnHit;
-    }
+        [SerializeField] private int _BaseDamage;
+        [SerializeField] private GameEvent _event;
+        private void Start()
+        {
+            GetComponent<INewBullet>().OnHit += OnHit;
+        }
 
-    private void OnHit(Collider collider) {
-        if (!collider.GetComponent<Hurtbox>()) return;
+        private void OnHit(Collider collider) {
+            if (!collider.GetComponent<Hurtbox>()) return;
 
-        int damageDealt = collider.GetComponent<Hurtbox>().GetHit(_BaseDamage);
-        ScoreboardUI.Instance.UpdatePlayerDamage(damageDealt, GetComponent<INewBullet>().Owner);
+            _event.Raise();
+            int damageDealt = collider.GetComponent<Hurtbox>().GetHit(_BaseDamage);
+            //ScoreboardUI.Instance.UpdatePlayerDamage(damageDealt, GetComponent<INewBullet>().Owner);
+        }
     }
 }

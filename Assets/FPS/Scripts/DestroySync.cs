@@ -1,14 +1,14 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class DestroySync : MonoBehaviour
+namespace FPS.Scripts
 {
-    public GameObject SyncedObject = null;
-
-    private void OnDestroy()
+    public class DestroySync : MonoBehaviour
     {
-        if (SyncedObject != null) Destroy(SyncedObject);
+        public GameObject SyncedObject = null;
+
+        private void OnDestroy()
+        {
+            if (SyncedObject != null) Destroy(SyncedObject);
+        }
     }
 }

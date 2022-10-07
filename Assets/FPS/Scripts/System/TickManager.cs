@@ -1,35 +1,36 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class TickManager : MonoBehaviour
+namespace FPS.Scripts.System
 {
-    public static TickManager Instance;
-    public Action OnTick;
-    public int TicksPerSecond;
-    private float _Timer;
-    private int _TotalTicks;
-
-    private void Awake()
+    public class TickManager : MonoBehaviour
     {
-        _Timer = 0;
-        _TotalTicks = 0;
+        public static TickManager Instance;
+        public Action OnTick;
+        public int TicksPerSecond;
+        private float _Timer;
+        private int _TotalTicks;
 
-        if (Instance == null) Instance = this;
-    }
+        private void Awake()
+        {
+            _Timer = 0;
+            _TotalTicks = 0;
 
-    void Update() {
-        _Timer += Time.deltaTime;
-        if (_Timer >= 1 / (float) TicksPerSecond) {
-            int ticks = (int) (_Timer / (1 / (float) TicksPerSecond));
-            _Timer -= (1 / (float) TicksPerSecond) * ticks;
-            _TotalTicks += ticks;
+            if (Instance == null) Instance = this;
+        }
+
+        void Update() {
+            _Timer += Time.deltaTime;
+            if (_Timer >= 1 / (float) TicksPerSecond) {
+                int ticks = (int) (_Timer / (1 / (float) TicksPerSecond));
+                _Timer -= (1 / (float) TicksPerSecond) * ticks;
+                _TotalTicks += ticks;
             
-            if (OnTick == null) return;
+                if (OnTick == null) return;
             
-            for (int x = 1; x <= ticks; x++) {
-                OnTick.Invoke();
+                for (int x = 1; x <= ticks; x++) {
+                    OnTick.Invoke();
+                }
             }
         }
     }

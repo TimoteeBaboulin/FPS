@@ -17,10 +17,10 @@ MonoBehaviour:
   _shotType: 0
   _projectile: {fileID: 2634395311925211373, guid: aa7ff54c205ade34c9f7582ed10dd327, type: 3}
   _visualProjectile: {fileID: 2634395311925211373, guid: 573b2ba8b724c6148a18d6853ded6b46, type: 3}
-  _shotDelay: 0.01
+  _shotDelay: 0.1
   _range: 0
   _spawnRange: 0
-  _magasineSize: 10
+  _magasineSize: 31
   _reloadTime: 2
   _pelletCount: 3
   _maxAngle: 15

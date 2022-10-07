@@ -1,14 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
+using FPS.Scripts.Interfaces;
 using UnityEngine;
 
-public class HitboxBase : MonoBehaviour, IDamageable
+namespace FPS.Scripts.Entities
 {
-    private Entity _Master;
-    private float _DamageModifier;
-
-    public int GetHit(int damage)
+    public class HitboxBase : MonoBehaviour, IDamageable
     {
-        return 0;
+        private Entity _Master;
+        private float _DamageModifier;
+
+        public int GetHit(int damage)
+        {
+            return 0;
+        }
     }
 }

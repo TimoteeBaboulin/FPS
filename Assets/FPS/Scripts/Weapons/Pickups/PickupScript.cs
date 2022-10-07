@@ -1,25 +1,24 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PickupScript : MonoBehaviour
+namespace FPS.Scripts.Weapons.Pickups
 {
-    public Gun PickupGun;
-
-    private void Awake()
+    public class PickupScript : MonoBehaviour
     {
-        if (PickupGun.GunMesh == null) return;
-        GetComponentInChildren<MeshFilter>().mesh = PickupGun.GunMesh;
-    }
+        public GameObject PickupGun;
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (!other.CompareTag("Player")) return;
-        ShootingClean shootingScript = other.GetComponentInChildren<ShootingClean>();
-        
-        if (shootingScript == null) throw new Exception("Shoot Scrip not found");
+        private void Awake()
+        {
+            if (PickupGun.GetComponent<Gun>() == null) return;
+            GetComponentInChildren<MeshFilter>().mesh = PickupGun.GetComponentInChildren<MeshFilter>().mesh;
+        }
 
-        shootingScript.ChangeGun(PickupGun);
+        private void OnTriggerEnter(Collider other)
+        {
+            if (!other.CompareTag("Player")) return;
+            Player player = other.GetComponent<Player>();
+
+            player.Gun = PickupGun;
+        }
     }
 }
