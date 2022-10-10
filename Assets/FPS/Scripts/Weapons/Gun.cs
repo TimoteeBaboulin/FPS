@@ -12,10 +12,7 @@ namespace FPS.Scripts
 
         public Animator GunAnimator;
         public Animator ReloadAnimator;
-        //Need access to gun barrel
-        //Need access to camera
-        //Already have camera given by Shoot()'s public call
-        //Use a public member to keep it in memory?
+
         [SerializeField] private GunStat _currentGun = null;
         [SerializeField] private int _currentMagasine = 30;
         private bool _canShoot = true;
@@ -99,7 +96,7 @@ namespace FPS.Scripts
             
             GameObject shot = Instantiate(_currentGun.Projectile,
                 transform.position + transform.forward * _currentGun.SpawnRange, transform.rotation);
-            GameObject visualProjectile = Instantiate(_currentGun.VisualProjectile, Barrel.transform.position, transform.rotation);
+            GameObject visualProjectile = Instantiate(_currentGun.VisualProjectile, Barrel.transform.position, Barrel.transform.rotation);
 
             if (x != 0 || y != 0)
             {
@@ -131,6 +128,8 @@ namespace FPS.Scripts
         private void PlayAnimation()
         {
             if (GunAnimator == null) return;
+            var muzzleFlash = Barrel.GetComponent<ParticleSystem>();
+            if (muzzleFlash != null) muzzleFlash.Play();
             GunAnimator.Play("Gun Animation", 1 , _currentGun.ShotDelay);
         }
 

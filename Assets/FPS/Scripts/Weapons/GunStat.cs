@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace FPS.Scripts
 {
@@ -11,7 +12,7 @@ namespace FPS.Scripts
         /// Everything here has no setter, it must but Serialized through Unity's Scriptable Object System
         /// In order to change these stats in calculations, an override structure will be introduced
         /// </summary>
-        [SerializeField] private Mesh _gunMesh = null;
+        [FormerlySerializedAs("_gunMesh")] [SerializeField] private Mesh _simplifiedMesh = null;
         [SerializeField] private GunTypeEnum _gunType = GunTypeEnum.Auto;
         [SerializeField] private ShotTypeEnum _shotType = ShotTypeEnum.Normal;
         [SerializeField] private GameObject _projectile = null;
@@ -26,9 +27,9 @@ namespace FPS.Scripts
         [SerializeField] private int _burstFire = 3;
         [SerializeField] private float _sight = 1;
 
-        public Mesh GunMesh
+        public Mesh SimplifiedMesh
         {
-            get => _gunMesh;
+            get => _simplifiedMesh;
         }
         public GunTypeEnum GunType
         {

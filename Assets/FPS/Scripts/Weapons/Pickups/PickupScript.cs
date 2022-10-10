@@ -6,11 +6,13 @@ namespace FPS.Scripts.Weapons.Pickups
     public class PickupScript : MonoBehaviour
     {
         public GameObject PickupGun;
+        public float Scale = 10;
+        //public Vector3 Position;
 
         private void Awake()
         {
             if (PickupGun.GetComponent<Gun>() == null) return;
-            GetComponentInChildren<MeshFilter>().mesh = PickupGun.GetComponentInChildren<MeshFilter>().sharedMesh;
+            GetComponentInChildren<MeshFilter>().mesh = PickupGun.GetComponent<Gun>().CurrentGun.SimplifiedMesh;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -18,7 +20,7 @@ namespace FPS.Scripts.Weapons.Pickups
             if (!other.CompareTag("Player")) return;
             Player player = other.GetComponent<Player>();
 
-            player.Gun = PickupGun;
+            player.ChangeWeapon(PickupGun);
         }
     }
 }

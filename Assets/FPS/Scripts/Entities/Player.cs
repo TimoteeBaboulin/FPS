@@ -70,6 +70,15 @@ namespace FPS.Scripts
             }
         }
 
+        void FixedUpdate()
+        {
+            RaycastHit hit;
+            Physics.Raycast(new Ray(_camera.transform.position, _camera.transform.forward), out hit, 100,
+                LayerMask.NameToLayer("Terrain"));
+            if (Gun == null) return;
+            Gun.transform.LookAt(hit.point);
+        }
+
         private void Move()
         {
             Vector3 movement = new Vector3();
@@ -132,6 +141,7 @@ namespace FPS.Scripts
         public void ChangeWeapon(GameObject gunPrefab)
         {
             if (_camera == null) return;
+            if (_gun != null) Destroy(_gun);
             _gun = Instantiate(gunPrefab, _camera.transform);
             SetIK();
         }

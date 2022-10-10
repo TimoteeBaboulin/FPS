@@ -10,7 +10,7 @@ namespace FPS.Scripts
         private SerializedProperty _projectile;
         private SerializedProperty _visualProjectile;
     
-        private SerializedProperty _gunMesh;
+        private SerializedProperty simplifiedMesh;
         private SerializedProperty _gunType;
         private SerializedProperty _burstFire;
         private SerializedProperty _shotType;
@@ -28,7 +28,7 @@ namespace FPS.Scripts
 
         private void OnEnable()
         {
-            _gunMesh = serializedObject.FindProperty("_gunMesh");
+            simplifiedMesh = serializedObject.FindProperty("_simplifiedMesh");
             _gunType = serializedObject.FindProperty("_gunType");
             _burstFire = serializedObject.FindProperty("_burstFire");
             _shotType = serializedObject.FindProperty("_shotType");
@@ -51,7 +51,7 @@ namespace FPS.Scripts
             serializedObject.Update();
         
             //Start drawing the first properties
-            EditorGUILayout.PropertyField(_gunMesh);
+            EditorGUILayout.PropertyField(simplifiedMesh);
             EditorGUILayout.PropertyField(_gunType);
         
             //Draw the Burst Fire property only if the gun is a burst weapon
